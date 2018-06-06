@@ -43,7 +43,7 @@ where
 
 import Control.Alt (class Alt)
 import Control.Alternative (class Alternative)
-import Control.Monad.Eff.Class (liftEff, class MonadEff)
+import Effect.Class (liftEffect, class MonadEffect)
 import Control.Monad.Error.Class (throwError)
 import Control.Monad.Except.Trans (ExceptT(ExceptT), runExceptT)
 import Control.Monad.Trans.Class (lift, class MonadTrans)
@@ -174,8 +174,8 @@ instance monadPlusExceptRT :: (Monoid r, Monad m) => MonadPlus (ExceptRT r m)
 instance monadTrans :: MonadTrans (ExceptRT r) where
   lift = ExceptRT <<< ExceptT <<< (Left <$> _)
 
-instance monadEffExceptRT :: MonadEff eff m => MonadEff eff (ExceptRT r m) where
-  liftEff = lift <<< liftEff
+instance monadEffExceptRT :: MonadEffect m => MonadEffect (ExceptRT r m) where
+  liftEffect = lift <<< liftEffect
 
 -- | Complete error handling, returning a result
 succeedT :: forall e m r. Monad m => r -> ExceptRT r m e
